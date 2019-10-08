@@ -12,7 +12,14 @@ tag: squillace/hello-helm3-bundle:latest
 # Uncomment out the line below to use a template Dockerfile for your invocation image
 #dockerfile: Dockerfile.tmpl
 
-parameters:
+credentials:
+- name: KUBE_CONFIG
+  path: /root/.kube/config
+
+# parameters:
+# - name: HELM_RELEASE
+#  type: string
+#  default: "whatever"  
 
 mixins:
   - exec
@@ -20,25 +27,37 @@ mixins:
 
 install:
   - helm3:
-      description: "installing hello " 
+      description: "Listing Helm3 releases..." 
+      arguments:
+        - list
+  - helm3:
+      description: "Adding a repo for charts..."
+      arguments:
+        - repo
+        - add
+        - azure-samples
+        - https://azure-samples.github.io/helm-charts/
+  - helm3:
+      description: "Installing the Azure Voting sample app..."
       arguments:
         - install
-      flags:
-        - "START HERE"
+        - azure-voting
+        - azure-samples/azure-vote
 
 upgrade:
-  - exec:
-      description: "World 2.0"
-      command: bash
-      flags:
-        c: echo World 2.0
+  - helm3:
+      description: "This bundle doesn't support upgrading. Only installation and uninstallation."
+      arguments: 
+        - status
+        - azure-voting
+
 
 uninstall:
-  - exec:
-      description: "Uninstall Hello World"
-      command: bash
-      flags:
-        c: echo Goodbye World
+  - helm3: 
+      description: "Deleting the Azure voting app with Helm3..."
+      arguments:
+        - delete
+        - azure-voting
 
 
 # See https://porter.sh/authoring-bundles/#dependencies
