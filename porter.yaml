@@ -5,9 +5,9 @@
 
 name: hello-helm3
 version: 0.1.0
-description: "An example Porter configuration"
-invocationImage: hello-helm3:latest
-tag: squillace/hello-helm3-bundle:latest
+description: "An example Porter bundle for using Helm3 to install a voting application on Kubernetes."
+invocationImage: squillace/hello-helm3-install:latest
+tag: squillace/hello-helm3:latest
 
 # Uncomment out the line below to use a template Dockerfile for your invocation image
 #dockerfile: Dockerfile.tmpl
@@ -15,6 +15,7 @@ tag: squillace/hello-helm3-bundle:latest
 credentials:
 - name: KUBE_CONFIG
   path: /root/.kube/config
+  description: "A kube config file that is used to target the cluster."
 
 # parameters:
 # - name: HELM_RELEASE
